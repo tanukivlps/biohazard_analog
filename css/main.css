@@ -1,45 +1,35 @@
-/* 1. IMPORTS BÁSICOS */
+/* =========================================
+   1. VARIABLES & BASE
+   ========================================= */
 @import 'variables.css';
 @import 'base.css';
 
-/* 2. CÓDIGO DE EFECTOS (Pegado directo para evitar errores de carga) */
-
-/* --- ESCANNER DE LÍNEAS (SCANLINES) --- */
+/* =========================================
+   2. EFECTOS DE ATMÓSFERA (SCANLINES/CRT)
+   ========================================= */
 .scanlines {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
+    top: 0; left: 0; width: 100vw; height: 100vh;
     background: linear-gradient(
         to bottom,
-        rgba(255, 255, 255, 0),
-        rgba(255, 255, 255, 0) 50%,
-        rgba(0, 0, 0, 0.2) 50%,
-        rgba(0, 0, 0, 0.2)
+        rgba(255,255,255,0),
+        rgba(255,255,255,0) 50%,
+        rgba(0,0,0,0.2) 50%,
+        rgba(0,0,0,0.2)
     );
     background-size: 100% 4px;
-    z-index: 998;
+    z-index: 900; /* Detrás del HUD */
     pointer-events: none;
 }
 
-/* --- VIÑETA OSCURA (VIGNETTE) --- */
 .vignette {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: radial-gradient(
-        circle,
-        rgba(0, 0, 0, 0) 60%,
-        rgba(0, 0, 0, 0.9) 100%
-    );
-    z-index: 999;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: radial-gradient(circle, rgba(0,0,0,0) 60%, rgba(0,0,0,0.9) 100%);
+    z-index: 901;
     pointer-events: none;
 }
 
-/* --- PARPADEO GENERAL (FLICKER) --- */
 @keyframes crt-flicker {
     0% { opacity: 0.95; }
     5% { opacity: 0.85; }
@@ -49,22 +39,83 @@
 
 body {
     animation: crt-flicker 0.15s infinite;
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    overflow-x: hidden;
 }
 
-/* --- TEXTO GLITCH V2 --- */
+body.locked {
+    overflow: hidden; /* Bloqueo de scroll para el menú */
+}
+
+/* --- FONDO INTERACTIVO (CANVAS) - BOOSTED --- */
+#bio-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0; 
+    pointer-events: none;
+    opacity: 1 !important; /* VISIBILIDAD MÁXIMA */
+    filter: contrast(1.2) brightness(1.2); /* Un extra de brillo */
+}
+
+/* =========================================
+   3. HUD (INTERFAZ DE USUARIO) - REPARADO
+   ========================================= */
+.hud-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 40px;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    z-index: 1000; /* Muy alto para que siempre se vea */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    pointer-events: none; /* Dejar pasar clics */
+    background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+}
+
+.status-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: #00ff41;
+    border-radius: 50%;
+    margin-right: 8px;
+    box-shadow: 0 0 10px #00ff41;
+}
+
+.hud-item.right {
+    color: var(--accent-blood);
+    text-shadow: 0 0 5px var(--accent-blood);
+    animation: blink 2s infinite; /* Animación REC */
+}
+
+/* =========================================
+   4. GLITCH TEXT EFFECT - REPARADO
+   ========================================= */
 .glitch-text {
     position: relative;
-    font-size: 4rem;
+    font-family: var(--font-header);
+    font-size: 5rem;
     font-weight: 900;
     color: var(--text-primary);
     letter-spacing: 4px;
-    z-index: 1;
+    text-transform: uppercase;
     animation: glitch-skew 1s infinite linear alternate-reverse;
 }
 
 .glitch-text::before,
 .glitch-text::after {
-    content: attr(data-text);
+    content: attr(data-text); /* VITAL: Copia el texto */
     position: absolute;
     top: 0;
     left: 0;
@@ -81,7 +132,7 @@ body {
     animation: glitch-anim-1 2.5s infinite linear alternate-reverse;
 }
 
-/* Capa Gris/Azulada */
+/* Capa Gris/Azul */
 .glitch-text::after {
     left: -2px;
     text-shadow: -2px 0 var(--text-dim);
@@ -89,7 +140,7 @@ body {
     animation: glitch-anim-2 3s infinite linear alternate-reverse;
 }
 
-/* KEYFRAMES */
+/* KEYFRAMES COMPLETOS (NO RESUMIDOS) */
 @keyframes glitch-anim-1 {
     0% { clip-path: inset(20% 0 80% 0); transform: translate(-2px, 0); }
     20% { clip-path: inset(60% 0 10% 0); transform: translate(2px, 0); }
@@ -117,43 +168,95 @@ body {
     100% { transform: skew(1deg); }
 }
 
-/* --- UI DE NAVEGACIÓN (HUD) --- */
-.hud-header {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
+/* =========================================
+   5. PANTALLA DE INICIO (START SCREEN) - REPARADO
+   ========================================= */
+.start-screen {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: #000;
+    z-index: 9990;
     display: flex;
-    justify-content: space-between;
-    padding: 20px 40px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+.game-title {
+    font-family: var(--font-header);
+    color: var(--accent-blood);
+    font-size: 3rem;
+    letter-spacing: 5px;
+    margin-bottom: 2rem;
+    opacity: 0.8;
+    text-shadow: 0 0 15px var(--accent-blood);
+}
+
+.press-key-text {
     font-family: var(--font-body);
-    font-size: 0.8rem;
-    color: var(--text-dim);
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    letter-spacing: 3px;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    z-index: 10;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    animation: pulse-text 1.5s infinite ease-in-out; /* Animación restaurada */
 }
 
-.status-dot {
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    background-color: #00ff41; /* Verde terminal clásico */
+@keyframes pulse-text {
+    0% { opacity: 0.2; transform: scale(0.98); }
+    50% { opacity: 1; transform: scale(1); text-shadow: 0 0 10px #fff; }
+    100% { opacity: 0.2; transform: scale(0.98); }
+}
+
+/* ANIMACIÓN BLINK (PARA EL HUD) */
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+/* =========================================
+   6. PANTALLA DE TRANSICIÓN (LOADING RE7)
+   ========================================= */
+.transition-screen {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: #000;
+    z-index: 10000;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    padding: 50px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.loader-content {
+    display: flex; align-items: center; gap: 15px;
+}
+
+.bio-spinner {
+    width: 30px; height: 30px;
+    border: 3px solid var(--accent-blood);
+    border-top-color: transparent;
     border-radius: 50%;
-    margin-right: 8px;
-    box-shadow: 0 0 10px #00ff41;
+    animation: spin 1s linear infinite;
 }
 
-.hud-item.right {
-    color: var(--accent-blood); /* El REC en rojo */
-    animation: blink 2s infinite;
+.loading-text {
+    font-family: var(--font-header);
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    animation: blink 0.5s infinite alternate;
 }
 
-/* --- HERO SECTION REVISADO --- */
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+/* =========================================
+   7. HERO & LAYOUT
+   ========================================= */
 .hero-section {
-    height: 100vh;           /* Fuerza altura de pantalla completa */
-    width: 100%;             /* Asegura ancho total */
+    min-height: 100vh;
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -161,7 +264,7 @@ body {
     text-align: center;
     position: relative;
     z-index: 5;
-    padding-top: 60px;       /* Compensa la altura del HUD Header */
+    padding-top: 60px;
 }
 
 .hero-label {
@@ -172,392 +275,305 @@ body {
     letter-spacing: 4px;
 }
 
-.hero-name {
-    font-family: var(--font-header);
-    font-size: 5rem; /* Gigante */
-    color: var(--text-primary);
-    margin: 0;
-    line-height: 1;
-    text-transform: uppercase;
+.hero-split {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 50px;
+    gap: 60px;
+    width: 100%;
+    max-width: 1000px;
 }
 
-.hero-role {
+.hemisphere { flex: 1; text-align: left; }
+.hemisphere.right { text-align: right; }
+
+.hemisphere-title {
+    font-family: var(--font-header);
+    color: var(--accent-rust);
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+    border-bottom: 1px solid rgba(184, 92, 56, 0.3);
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+.hemisphere-list li {
     font-family: var(--font-body);
     color: var(--text-dim);
-    font-size: 1.2rem;
-    margin-top: var(--spacing-md);
-    letter-spacing: 2px;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+    transition: color 0.3s;
+    list-style: none;
+}
+.hemisphere-list li:hover {
+    color: var(--text-primary);
+    text-shadow: 0 0 5px var(--text-primary);
 }
 
-.bracket {
-    color: var(--accent-rust);
-    font-weight: bold;
+.split-divider {
+    width: 1px;
+    height: 180px;
+    background: linear-gradient(to bottom, transparent, var(--accent-blood), transparent);
+    opacity: 0.6;
 }
 
-/* --- BOTÓN CYBERPUNK --- */
+.split-action {
+    margin-top: 30px;
+    display: flex;
+    justify-content: flex-start;
+}
+.hemisphere.right .split-action { justify-content: flex-end; }
+
+/* =========================================
+   8. COMPONENTES: BOTONES Y TARJETAS
+   ========================================= */
 .btn-cyber {
     display: inline-block;
-    margin-top: 40px;
-    padding: 15px 40px;
+    padding: 12px 25px;
     border: 1px solid var(--accent-blood);
     color: var(--accent-blood);
     text-decoration: none;
     font-family: var(--font-body);
-    letter-spacing: 3px;
+    letter-spacing: 2px;
     font-weight: bold;
-    position: relative;
-    overflow: hidden;
+    font-size: 0.9rem;
     transition: all 0.3s ease;
+    cursor: pointer; /* Fuerza cursor de mano si falla el custom */
 }
-
 .btn-cyber:hover {
     background-color: var(--accent-blood);
-    color: var(--bg-color); /* Invierte colores al pasar el mouse */
-    box-shadow: 0 0 20px var(--accent-blood);
+    color: #000;
+    box-shadow: 0 0 15px var(--accent-blood);
 }
 
-@keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
+/* --- FIX PARA QUE EL TEXTO NO SE ROMPA EN PC --- */
+.btn-small {
+    white-space: nowrap !important; /* ⚠️ ESTA ES LA CLAVE: Prohíbe partir el texto */
+    width: auto !important;         /* El ancho se adapta al texto */
+    display: inline-block;
+    font-size: 0.75rem;             /* Un poco más pequeño para asegurar que quepa */
+    letter-spacing: 1px;            /* Menos espacio entre letras */
+    padding: 12px 20px;
+    max-width: 100%;
 }
 
-/* --- SECCIÓN DE PROYECTOS --- */
-.projects-section {
-    padding: 100px 10%; /* Espacio para respirar */
-    background-color: var(--bg-color);
-    position: relative;
-    z-index: 5;
-}
-
-.section-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 60px;
-}
-
-.section-title {
-    font-family: var(--font-header);
+.btn-back {
+    background: none; border: none;
     color: var(--text-dim);
-    font-size: 2rem;
-    margin-right: 20px;
+    font-family: var(--font-header);
+    font-size: 1.1rem;
+    cursor: pointer;
+    margin-bottom: 30px;
+    transition: color 0.3s;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+}
+.btn-back:hover { color: var(--accent-rust); text-shadow: 0 0 5px var(--accent-rust); }
+
+.btn-contact {
+    font-size: 1rem !important;
+    padding: 15px 40px !important;
+    border-color: var(--text-primary);
+    color: var(--text-primary);
+}
+.btn-contact:hover {
+    background-color: var(--text-primary);
+    color: var(--bg-color);
+    box-shadow: 0 0 20px var(--text-primary);
+    border-color: var(--text-primary);
 }
 
-.decoration-line {
-    flex-grow: 1;
-    height: 1px;
-    background: var(--accent-rust);
-    opacity: 0.5;
+.content-page {
+    min-height: 100vh;
+    padding-top: 120px;
+    padding-bottom: 50px;
+    animation: fadeIn 1s ease-out;
 }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-/* --- GRID SYSTEM --- */
+.projects-section { padding: 0 10% 50px 10%; }
+.section-title { font-family: var(--font-header); color: var(--text-dim); font-size: 2rem; }
+.decoration-line { height: 1px; background: var(--accent-rust); opacity: 0.5; margin-top: 10px; width: 100%; }
+
 .projects-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive automático */
-    gap: 40px;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; margin-top: 40px;
 }
 
-/* --- TARJETA DE PROYECTO --- */
 .project-card {
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.02);
     transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
 }
-
 .project-card:hover {
     border-color: var(--accent-rust);
     transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
 }
 
 .card-visual {
-    height: 200px;
-    background: #111;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    height: 220px;
+    background: #0a0a0a;
+    display: flex; justify-content: center; align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
 }
-
 .placeholder-img {
-    font-family: var(--font-header);
-    color: #333;
-    font-size: 2rem;
-    letter-spacing: 5px;
+    font-family: var(--font-header); color: #333; font-size: 2rem; letter-spacing: 5px;
 }
 
-.card-info {
-    padding: 20px;
-}
+.card-info { padding: 25px; }
+.project-id { font-size: 0.7rem; color: var(--accent-blood); display: block; margin-bottom: 5px; }
+.project-title { font-family: var(--font-header); color: var(--text-primary); font-size: 1.4rem; margin-bottom: 10px; }
+.project-desc { font-size: 0.9rem; color: var(--text-dim); margin-bottom: 15px; line-height: 1.5; }
+.tags { display: flex; gap: 10px; flex-wrap: wrap; }
+.tag { font-size: 0.7rem; border: 1px solid var(--text-dim); padding: 3px 8px; color: var(--text-dim); }
 
-.project-id {
-    font-size: 0.7rem;
-    color: var(--accent-blood);
-    display: block;
-    margin-bottom: 5px;
-}
+/* SKILLS */
+.arsenal-section { margin-top: 60px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 40px; }
+.arsenal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+.module-card { background: rgba(15,15,15,0.8); border: 1px solid var(--text-dim); padding: 20px; }
+.module-bar-container { height: 4px; background: #222; margin-top: 10px; }
+.module-bar { height: 100%; background: var(--accent-rust); }
 
-.project-title {
-    font-family: var(--font-header);
-    color: var(--text-primary);
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-}
-
-.project-desc {
-    font-size: 0.9rem;
-    color: var(--text-dim);
-    margin-bottom: 15px;
-    line-height: 1.4;
-}
-
-.tags {
-    display: flex;
-    gap: 10px;
-}
-
-.tag {
-    font-size: 0.7rem;
-    border: 1px solid var(--text-dim);
-    padding: 2px 8px;
-    color: var(--text-dim);
-    text-transform: uppercase;
-}
-
-.project-card:hover .tag {
-    border-color: var(--accent-rust);
-    color: var(--accent-rust);
-}
-
-/* --- CURSOR TÁCTICO (V.3 - ALTA VISIBILIDAD) --- */
-
-/* 1. Ocultar cursor nativo */
-html, body, * {
-    cursor: none !important;
-}
-
-/* 2. El punto de mira (DOT) */
-.cursor {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 10px;        /* Un poco más grande para verlo bien */
-    height: 10px;
-    background-color: #ff0000; /* ROJO PURO SÓLIDO */
-    border-radius: 50%;
-    z-index: 2147483647; /* El número más alto posible en CSS */
-    pointer-events: none;
-    transform: translate(-50%, -50%);
-    box-shadow: 0 0 10px #ff0000; /* Resplandor para ayudar a verlo */
-    display: block !important; /* Forzamos que se muestre */
-    opacity: 1 !important;     /* Forzamos opacidad total */
-}
-
-/* 3. El seguidor (CIRCLE) */
-.cursor-follower {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 50px;
-    height: 50px;
-    background: rgba(255, 0, 0, 0.1); /* Fondo rojo muy suave */
-    border: 2px solid #ff0000;        /* Borde sólido */
-    border-radius: 50%;
-    z-index: 2147483646; /* Uno menos que el punto */
-    pointer-events: none;
-    transform: translate(-50%, -50%);
-    transition: width 0.2s, height 0.2s, background-color 0.2s;
-    display: block !important;
-    opacity: 1 !important;
-}
-
-/* Estado Activo (Lock-on) */
-.cursor-active {
-    width: 80px;
-    height: 80px;
-    background-color: rgba(255, 0, 0, 0.2);
-    border-color: #ffffff; /* Se vuelve blanco al interactuar */
-    border-width: 2px;
-}
-
-/* --- CORRECCIÓN DE NOMBRE (WRAPPER) --- */
-.hero-name-wrapper {
-    display: inline-block; /* Ajusta el tamaño al contenido */
-    overflow: visible;     /* Permite que el glitch salga de la caja */
-}
-
-/* --- SECCIÓN ARSENAL (SKILLS) --- */
-.arsenal-section {
-    padding: 0 10% 100px 10%;
-    position: relative;
-    z-index: 5;
-}
-
-.arsenal-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 30px;
-}
-
-.module-card {
-    background: rgba(10, 10, 10, 0.8);
-    border: 1px solid var(--text-dim);
-    padding: 20px;
-    position: relative;
-    transition: all 0.3s ease;
-}
-
-.module-card:hover {
-    border-color: var(--accent-blood);
-    background: rgba(74, 14, 14, 0.1);
-    transform: translateY(-2px);
-}
-
-.module-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 15px;
-    font-size: 0.7rem;
-    color: var(--accent-rust);
-    font-family: var(--font-body);
-}
-
-.module-status {
-    animation: blink 3s infinite;
-}
-
-.module-name {
-    font-family: var(--font-header);
-    color: var(--text-primary);
-    font-size: 1.2rem;
-    margin-bottom: 10px;
-    letter-spacing: 1px;
-}
-
-.module-bar-container {
-    width: 100%;
-    height: 4px;
-    background: #222;
-    margin-bottom: 15px;
-    position: relative;
-}
-
-.module-bar {
-    height: 100%;
-    background: var(--accent-rust);
-    position: relative;
-    box-shadow: 0 0 10px var(--accent-rust);
-}
-
-.module-card:hover .module-bar {
-    background: var(--accent-blood);
-    box-shadow: 0 0 10px var(--accent-blood);
-}
-
-.module-desc {
-    font-size: 0.8rem;
-    color: var(--text-dim);
-    line-height: 1.4;
-}
-
-/* --- FOOTER TERMINAL --- */
+/* FOOTER */
 .terminal-footer {
-    padding: 60px 20px;
-    text-align: center;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    background: #050505;
-    position: relative;
-    z-index: 10;
+    padding: 60px 20px; text-align: center; background: #050505;
+    border-top: 1px solid rgba(255, 255, 255, 0.1); margin-top: auto;
 }
-
-.footer-status {
-    color: var(--text-dim);
-    font-family: var(--font-body);
-    font-size: 0.9rem;
-    margin-bottom: 30px;
-    letter-spacing: 2px;
-}
-
 .contact-link {
-    display: inline-block;
-    border: 1px solid var(--text-primary);
-    padding: 15px 30px;
-    color: var(--text-primary);
-    text-decoration: none;
-    font-family: var(--font-header);
-    font-size: 1.2rem;
-    letter-spacing: 3px;
-    transition: all 0.3s ease;
+    display: inline-block; border: 1px solid var(--text-primary); padding: 15px 30px;
+    color: var(--text-primary); text-decoration: none; font-family: var(--font-header);
+    font-size: 1.2rem; letter-spacing: 3px; margin: 20px 0;
 }
+.contact-link:hover { background: var(--text-primary); color: var(--bg-color); }
 
-.contact-link:hover {
-    background: var(--text-primary);
-    color: var(--bg-color);
-    box-shadow: 0 0 20px var(--text-primary);
+/* CURSOR SYSTEM */
+html, body, * { cursor: none !important; }
+
+.cursor {
+    position: fixed; top: 0; left: 0; width: 8px; height: 8px;
+    background-color: #ff0000; border-radius: 50%; z-index: 999999;
+    pointer-events: none; transform: translate(-50%, -50%); display: block !important;
+    box-shadow: 0 0 10px #ff0000;
 }
-
-.footer-credits {
-    margin-top: 50px;
-    font-size: 0.7rem;
-    color: #444;
+.cursor-follower {
+    position: fixed; top: 0; left: 0; width: 40px; height: 40px;
+    background: rgba(255, 0, 0, 0.05); border: 1px solid #ff0000; border-radius: 50%;
+    z-index: 999998; pointer-events: none; transform: translate(-50%, -50%);
+    display: block !important; transition: width 0.2s, height 0.2s;
 }
+.cursor-active { width: 60px; height: 60px; background-color: rgba(255, 0, 0, 0.15); border-color: #fff; }
 
-.blink {
-    animation: blink 1s infinite;
-}
-
-/* --- MEDIA QUERIES (VERSIÓN MÓVIL) --- */
+/* MOBILE RESPONSIVE */
 @media (max-width: 768px) {
+    .hero-name { font-size: 3rem; }
+    .hero-split { flex-direction: column; align-items: center; gap: 40px; margin-top: 30px; }
+    .hemisphere { text-align: center !important; }
+    .hemisphere.right { text-align: center !important; }
     
-    /* 1. Ajuste de textos gigantes */
-    .hero-name {
-        font-size: 2.8rem; /* Reducimos drásticamente */
-        letter-spacing: 2px;
-    }
-
-    .hero-role {
-        font-size: 0.8rem;
-    }
-
-    /* 2. HUD Simplificado */
-    .hud-header {
-        padding: 15px;
-        font-size: 0.6rem;
-    }
-    .hud-item.center {
-        display: none; /* Ocultamos el centro para ganar espacio */
-    }
-
-    /* 3. Desactivar Cursor Táctico (Inútil en touch) */
-    .cursor, .cursor-follower {
-        display: none !important;
-    }
+    .split-divider { width: 100px; height: 1px; background: linear-gradient(to right, transparent, var(--accent-blood), transparent); }
     
-    html, body, a, button, * {
-        cursor: auto !important; /* Restauramos el toque nativo */
-    }
-
-    /* 4. Ajuste de márgenes */
-    .projects-section, .arsenal-section {
-        padding: 60px 5%;
-    }
+    .split-action { justify-content: center; }
+    .hemisphere.right .split-action { justify-content: center; }
     
-    .section-title {
-        font-size: 1.5rem;
-    }
+    /* Restaurar cursor nativo en móvil */
+    .cursor, .cursor-follower { display: none !important; }
+    html, body, a, button, * { cursor: auto !important; }
+    
+    .contact-link { font-size: 0.7rem !important; width: 90%; white-space: normal; }
+    
+    /* Ajuste HUD móvil */
+    .hud-header { padding: 10px 20px; font-size: 0.6rem; }
+    .hud-item.center { display: none; }
 
-    /* NUEVO: Ajuste del botón de contacto gigante */
-    .contact-link {
-        font-size: 0.7rem !important; /* Reducimos la letra drásticamente */
-        padding: 12px 10px !important; /* Menos relleno lateral */
-        width: 100%;                   /* Que ocupe todo el ancho disponible */
-        display: block;                /* Asegura que sea un bloque */
-        white-space: normal;           /* Permite que el texto salte de línea si es necesario */
-        line-height: 1.4;              /* Espaciado si salta de línea */
+    /* Modificador para botones más compactos (MÓVIL) */
+    .btn-small {
+        padding: 10px 15px;          /* Un poco menos de relleno lateral */
+        font-size: 0.7rem;           /* Letra ajustada para caber siempre */
+        letter-spacing: 1px;         /* Espaciado táctico reducido */
+        white-space: nowrap !important; /* ⚠️ ORDEN SUPREMA: Prohibido partir la línea */
+        display: inline-block;       /* Comportamiento sólido */
+        width: auto !important;      /* Que se ajuste al contenido */
+        max-width: 100%;             /* Que nunca se salga del contenedor padre */
     }
+}
 
-    .footer-status {
-        font-size: 0.7rem;             /* Ajustamos también el texto de estado */
-    }
+/* --- SELECTOR DE IDIOMA (LANGUAGE MODULE) --- */
+.lang-container {
+    position: relative;
+    pointer-events: auto !important; /* Vital para poder hacer clic */
+    cursor: pointer;
+}
+
+.selected-lang {
+    color: var(--accent-blood);
+    font-weight: bold;
+    letter-spacing: 2px;
+    transition: text-shadow 0.3s;
+}
+
+.selected-lang:hover {
+    text-shadow: 0 0 10px var(--accent-blood);
+}
+
+.lang-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 120px;
+    background: rgba(10, 10, 10, 0.95);
+    border: 1px solid var(--accent-rust);
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+    display: none; /* Oculto por defecto */
+    flex-direction: column;
+    z-index: 2000;
+    box-shadow: 0 0 15px rgba(0,0,0,0.8);
+}
+
+.lang-dropdown.active {
+    display: flex;
+    animation: glitch-anim-1 0.2s steps(2, end); /* Pequeño glitch al abrir */
+}
+
+.lang-dropdown li {
+    padding: 10px 15px;
+    color: var(--text-dim);
+    font-size: 0.7rem;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.lang-dropdown li:hover {
+    background: var(--accent-blood);
+    color: #000;
+    padding-left: 20px; /* Efecto de desplazamiento */
+}
+
+.lang-dropdown li:last-child {
+    border-bottom: none;
+}
+
+/* Soporte para fuente japonesa */
+body[data-lang="jp"] {
+    font-family: "Noto Sans JP", sans-serif !important; /* Fallback si no tienes fuente cyber */
+}
+
+/* --- FIX DE SEGURIDAD PARA CLICS --- */
+.noise, 
+.scanlines, 
+.vignette, 
+#bio-canvas {
+    pointer-events: none !important; /* El ratón atraviesa estas capas */
+}
+
+/* Asegurar que el botón de contacto esté por encima de todo */
+.hero-actions {
+    position: relative;
+    z-index: 100; /* Prioridad alta */
 }

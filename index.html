@@ -5,17 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     
-    <title>SYSTEM_ERROR // [Eduardo Rodriguez Ramos]</title>
+    <title>SYSTEM_ERROR // [Eduardo Rodriguez]</title>
 
-    <meta name="description" content="Portfolio de Eduardo Rodriguez - 3D Artist & Narrative Designer. Especializado en Unreal Engine y Narrativa Ambiental.">
+    <meta name="description" content="Portfolio de Eduardo Rodriguez - 3D Artist & Narrative Designer.">
     <meta property="og:title" content="SYSTEM_ERROR // EDUARDO RODRIGUEZ">
     <meta property="og:description" content="Accediendo a archivos clasificados... [3D ARTIST & NARRATIVE DESIGNER]">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="assets/img/preview.jpg"> <meta name="theme-color" content="#050505">
+    <meta name="theme-color" content="#050505">
 
     <link rel="stylesheet" href="css/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+
+    <canvas id="bio-canvas"></canvas>
+
+    <header class="hud-header">
+        <div class="hud-item left">
+            <span class="status-dot"></span> <span data-i18n="system_status">SISTEMA: EN LÍNEA</span>
+        </div>
+        
+        <div class="hud-item right lang-container">
+            <div class="selected-lang" id="lang-toggle">
+                [ <span id="current-lang-text">ES</span> ]
+            </div>
+            <ul class="lang-dropdown" id="lang-list">
+                <li data-lang="es">ESPAÑOL</li>
+                <li data-lang="en">ENGLISH</li>
+                <li data-lang="it">ITALIANO</li>
+                <li data-lang="fr">FRANÇAIS</li>
+                <li data-lang="jp">日本語</li> 
+                <li data-lang="de">DEUTSCH</li>
+            </ul>
+        </div>
+    </header>
 
     <div class="noise"></div>
     <div class="scanlines"></div>
@@ -24,166 +47,188 @@
     <div class="cursor"></div>
     <div class="cursor-follower"></div>
 
+    <div id="start-screen" class="start-screen">
+        <div class="start-content">
+            <h1 class="game-title">REQUIEM_FOR_THE_NAMELESS</h1>
+            <p class="press-key-text" data-i18n="press_key">PRESIONA CUALQUIER TECLA</p>
+        </div>
+    </div>
+
+    <div id="transition-screen" class="transition-screen">
+        <div class="loader-content">
+            <div class="bio-spinner"></div>
+            <p class="loading-text" data-i18n="loading">CARGANDO DATOS...</p>
+        </div>
+    </div>
+
     <main class="container">
         
-        <header class="hud-header">
-            <div class="hud-item left">
-                <span class="status-dot"></span> SYSTEM: ONLINE
-            </div>
-            <div class="hud-item center">
-                NEXUS_ARCHIVE // V.1.0
-            </div>
-            <div class="hud-item right">
-                [REC] <span class="time-code">00:00:00</span>
-            </div>
-        </header>
+        <div id="main-menu">
+            <section class="hero-section">
+                <div class="hero-content">
+                    <p class="hero-label" data-i18n="subject_id">SUJETO IDENTIFICADO:</p>
+                    
+                    <div class="hero-name-wrapper">
+                        <h1 class="hero-name glitch-text" data-text="EDUARDO RODRIGUEZ">EDUARDO RODRIGUEZ</h1>
+                    </div>    
+                    
+                    <div class="hero-split">
+                        
+                        <div class="hemisphere left">
+                            <h3 class="hemisphere-title" data-i18n="visual_cortex">[ CORTEZA VISUAL ]</h3>
+                            <ul class="hemisphere-list">
+                                <li data-i18n="v_skill_1">Modelado 3D y Esculpido</li>
+                                <li data-i18n="v_skill_2">Diseño Hard Surface</li>
+                                <li data-i18n="v_skill_3">Concept Art y Texturizado</li>
+                                <li data-i18n="v_skill_4">Integración Unreal Engine</li>
+                            </ul>
+                            <div class="split-action">
+                                <a href="#" data-target="visual-page" class="btn-cyber btn-small page-trigger">
+                                   <span class="btn-text" data-i18n="btn_visual">ACCEDER A DATOS VISUALES</span>
+                                   <span class="btn-glitch"></span>
+                                </a>
+                            </div>
+                        </div>
 
-        <section class="hero-section">
-            <div class="hero-content">
-                <p class="hero-label">SUBJECT IDENTIFIED:</p>
-                <div class="hero-name-wrapper">
-                    <h1 class="hero-name glitch-text" data-text="EDUARDO RODRIGUEZ">EDUARDO RODRIGUEZ</h1>
-                </div>    
-                <h2 class="hero-role">
-                    <span class="bracket">[</span> 3D ARTIST & NARRATIVE DESIGNER <span class="bracket">]</span>
-                </h2>
-                
-                <div class="hero-actions">
-                    <a href="#projects" class="btn-cyber">
-                        <span class="btn-text">ACCEDER A DATOS</span>
+                        <div class="split-divider"></div>
+
+                        <div class="hemisphere right">
+                            <h3 class="hemisphere-title" data-i18n="narrative_core">[ NÚCLEO NARRATIVO ]</h3>
+                            <ul class="hemisphere-list">
+                                <li data-i18n="n_skill_1">Perfilado Psicológico</li>
+                                <li data-i18n="n_skill_2">Creación de Mundos (Lore)</li>
+                                <li data-i18n="n_skill_3">Lógica de Sistemas Mágicos</li>
+                                <li data-i18n="n_skill_4">Narrativa Ambiental</li>
+                            </ul>
+                            <div class="split-action">
+                                <a href="#" data-target="narrative-page" class="btn-cyber btn-small page-trigger">
+                                    <span class="btn-text" data-i18n="btn_narrative">ACCEDER A ARCHIVOS DE LORE</span>
+                                    <span class="btn-glitch"></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hero-actions">
+                        <p class="action-label" data-i18n="recruit_label" style="margin-top: 40px; font-family: var(--font-body); color: var(--text-dim); letter-spacing: 3px; font-size: 0.8rem;">DISPONIBLE PARA DESPLIEGUE</p>
+                        <a href="mailto:azazel_vlps@outlook.com" id="contact-btn" class="btn-cyber btn-contact">
+                        <span class="btn-text" data-i18n="btn_contact">ESTABLECER_ENLACE [EMAIL]</span>
                         <span class="btn-glitch"></span>
                     </a>
+                    </div>
+                    
                 </div>
-            </div>
-        </section>
-
-        <section id="projects" class="projects-section">
-            <div class="section-header">
-                <h3 class="section-title">EVIDENCE_LOG</h3>
-                <div class="decoration-line"></div>
-            </div>
-
-            <section class="arsenal-section">
-            <div class="section-header">
-                <h3 class="section-title">NEURAL_MODULES</h3>
-                <div class="decoration-line"></div>
-            </div>
-
-            <div class="arsenal-grid">
-                
-                <div class="module-card">
-                    <div class="module-header">
-                        <span class="module-icon">UE5</span>
-                        <span class="module-status">ACTIVE</span>
+            </section>
+            
+            <footer class="terminal-footer">
+                <div class="footer-content">
+                    <p class="footer-status"><span data-i18n="session_status">ESTADO DE SESIÓN:</span> <span class="blink" data-i18n="waiting_input">ESPERANDO COMANDO...</span></p>
+                    <div class="footer-credits">
+                        <p>&copy; 2026 NEXUS_ARCHIVE. <span data-i18n="rights">TODOS LOS DERECHOS RESERVADOS.</span></p>
                     </div>
-                    <h4 class="module-name">UNREAL ENGINE 5</h4>
-                    <div class="module-bar-container">
-                        <div class="module-bar" style="width: 90%"></div>
+                </div>
+            </footer>
+        </div>
+
+        <div id="visual-page" class="content-page" style="display: none;">
+            <section class="projects-section">
+                <div class="page-header">
+                    <button class="btn-back" data-target="main-menu">
+                        &lt; <span data-i18n="return_main">VOLVER AL SISTEMA PRINCIPAL</span>
+                    </button>
+                    <div class="header-title-block">
+                        <h3 class="section-title" data-i18n="visual_log_title">REGISTRO_VISUAL // MODELOS_3D</h3>
+                        <div class="decoration-line"></div>
                     </div>
-                    <p class="module-desc">Blueprints, Level Design, Lumen & Nanite Workflows.</p>
                 </div>
 
-                <div class="module-card">
-                    <div class="module-header">
-                        <span class="module-icon">BLEND</span>
-                        <span class="module-status">OPTIMIZED</span>
-                    </div>
-                    <h4 class="module-name">BLENDER 3D</h4>
-                    <div class="module-bar-container">
-                        <div class="module-bar" style="width: 85%"></div>
-                    </div>
-                    <p class="module-desc">Hard Surface, Sculpting, Retopology & UV Mapping.</p>
-                </div>
-
-                <div class="module-card">
-                    <div class="module-header">
-                        <span class="module-icon">NARR</span>
-                        <span class="module-status">SYNCED</span>
-                    </div>
-                    <h4 class="module-name">NARRATIVE DESIGN</h4>
-                    <div class="module-bar-container">
-                        <div class="module-bar" style="width: 95%"></div>
-                    </div>
-                    <p class="module-desc">Environmental Storytelling, Lore Creation, Character Psychology.</p>
-                </div>
-
-                <div class="module-card">
-                    <div class="module-header">
-                        <span class="module-icon">SUB</span>
-                        <span class="module-status">LOADING</span>
-                    </div>
-                    <h4 class="module-name">SUBSTANCE PAINTER</h4>
-                    <div class="module-bar-container">
-                        <div class="module-bar" style="width: 75%"></div>
-                    </div>
-                    <p class="module-desc">PBR Texturing, Material Creation, Masking.</p>
-                </div>
-
-            </div>
-        </section>
-
-        <footer class="terminal-footer">
-            <div class="footer-content">
-                <p class="footer-status">SESSION STATUS: <span class="blink">WAITING FOR INPUT...</span></p>
-                
-                <a href="mailto:tuemail@ejemplo.com" class="contact-link">
-                    INITIATE_COMMUNICATION_PROTOCOL [EMAIL]
-                </a>
-
-                <div class="footer-credits">
-                    <p>&copy; 2026 NEXUS_ARCHIVE. ALL RIGHTS RESERVED.</p>
-                </div>
-            </div>
-        </footer>
-
-            <div class="projects-grid">
-                
-                <article class="project-card">
-                    <div class="card-visual">
-                        <div class="placeholder-img">NO SIGNAL</div>
-                    </div>
-                    <div class="card-info">
-                        <span class="project-id">CASE_#001</span>
-                        <h4 class="project-title">PROJECT_ZENITH</h4>
-                        <p class="project-desc">Exploración de entorno 3D en Unreal Engine 5. Diseño de narrativa ambiental.</p>
-                        <div class="tags">
-                            <span class="tag">UE5</span>
-                            <span class="tag">BLENDER</span>
+                <div class="projects-grid">
+                    <article class="project-card">
+                        <div class="card-visual"><div class="placeholder-img">UE5 RENDER</div></div>
+                        <div class="card-info">
+                            <span class="project-id">VISUAL_#001</span>
+                            <h4 class="project-title">PROJECT_ZENITH</h4>
+                            <p class="project-desc" data-i18n="proj_zenith_desc">Entorno 3D y Assets en Unreal Engine 5.</p>
+                            <div class="tags"><span class="tag">UE5</span><span class="tag">BLENDER</span></div>
                         </div>
-                    </div>
-                </article>
-
-                <article class="project-card">
-                    <div class="card-visual">
-                        <div class="placeholder-img">CORRUPTED</div>
-                    </div>
-                    <div class="card-info">
-                        <span class="project-id">CASE_#002</span>
-                        <h4 class="project-title">CHARACTER_STUDY</h4>
-                        <p class="project-desc">Modelado de personaje y psicología del color. Render en tiempo real.</p>
-                        <div class="tags">
-                            <span class="tag">ZBRUSH</span>
-                            <span class="tag">SUBSTANCE</span>
+                    </article>
+                    
+                     <article class="project-card">
+                        <div class="card-visual"><div class="placeholder-img">SCULPT</div></div>
+                        <div class="card-info">
+                            <span class="project-id">VISUAL_#002</span>
+                            <h4 class="project-title">CYBER_HEAD</h4>
+                            <p class="project-desc" data-i18n="proj_head_desc">Esculpido orgánico hard-surface.</p>
+                            <div class="tags"><span class="tag">ZBRUSH</span></div>
                         </div>
-                    </div>
-                </article>
-
-                <article class="project-card">
-                    <div class="card-visual">
-                        <div class="placeholder-img">ENCRYPTED</div>
-                    </div>
-                    <div class="card-info">
-                        <span class="project-id">CASE_#003</span>
-                        <h4 class="project-title">[REDACTED]</h4>
-                        <p class="project-desc">Proyecto confidencial en desarrollo. Acceso denegado.</p>
-                        <div class="tags">
-                            <span class="tag">NARRATIVE</span>
+                    </article>
+                </div>
+                
+                <div class="arsenal-section" style="padding-top: 50px;">
+                     <h4 class="module-name" style="margin-bottom: 20px; color: var(--accent-rust);" data-i18n="installed_modules">MÓDULOS INSTALADOS:</h4>
+                     <div class="arsenal-grid">
+                        <div class="module-card">
+                            <h4 class="module-name">UNREAL ENGINE 5</h4>
+                            <p class="module-desc" data-i18n="mod_ue5_desc">Blueprints, Diseño de Niveles, Flujos Lumen & Nanite.</p>
+                            <div class="module-bar-container"><div class="module-bar" style="width: 90%"></div></div>
                         </div>
-                    </div>
-                </article>
+                        <div class="module-card">
+                            <h4 class="module-name">BLENDER 3D</h4>
+                            <p class="module-desc" data-i18n="mod_blend_desc">Hard Surface, Esculpido, Retopología y Mapeo UV.</p>
+                            <div class="module-bar-container"><div class="module-bar" style="width: 85%"></div></div>
+                        </div>
+                     </div>
+                </div>
+            </section>
+        </div>
 
-            </div>
-        </section>
+        <div id="narrative-page" class="content-page" style="display: none;">
+            <section class="projects-section">
+                 <div class="page-header">
+                    <button class="btn-back" data-target="main-menu">
+                        &lt; <span data-i18n="return_main">VOLVER AL SISTEMA PRINCIPAL</span>
+                    </button>
+                    <div class="header-title-block">
+                        <h3 class="section-title" data-i18n="narrative_log_title">REGISTRO_NARRATIVO // LORE</h3>
+                        <div class="decoration-line"></div>
+                    </div>
+                </div>
+
+                <div class="projects-grid">
+                    <article class="project-card">
+                        <div class="card-visual"><div class="placeholder-img">DOCS</div></div>
+                        <div class="card-info">
+                            <span class="project-id">LORE_#001</span>
+                            <h4 class="project-title">ECHOES OF SILENCE</h4>
+                            <p class="project-desc" data-i18n="proj_echoes_desc">Guion técnico y perfil psicológico del protagonista.</p>
+                            <div class="tags"><span class="tag">WRITING</span></div>
+                        </div>
+                    </article>
+                    
+                    <article class="project-card">
+                        <div class="card-visual"><div class="placeholder-img">MAP</div></div>
+                        <div class="card-info">
+                            <span class="project-id">LORE_#002</span>
+                            <h4 class="project-title">WORLD MAP V.4</h4>
+                            <p class="project-desc" data-i18n="proj_map_desc">Diseño de geografía y sistemas políticos.</p>
+                            <div class="tags"><span class="tag">WORLD BUILDING</span></div>
+                        </div>
+                    </article>
+                </div>
+
+                 <div class="arsenal-section" style="padding-top: 50px;">
+                     <h4 class="module-name" style="margin-bottom: 20px; color: var(--accent-rust);" data-i18n="cognitive_modules">MÓDULOS COGNITIVOS:</h4>
+                     <div class="arsenal-grid">
+                        <div class="module-card">
+                            <h4 class="module-name">NARRATIVE DESIGN</h4>
+                             <p class="module-desc" data-i18n="mod_narr_desc">Narrativa Ambiental, Creación de Lore, Psicología de Personajes.</p>
+                            <div class="module-bar-container"><div class="module-bar" style="width: 95%"></div></div>
+                        </div>
+                     </div>
+                </div>
+            </section>
+        </div>
+
     </main>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
