@@ -1,0 +1,49 @@
+/* Reset Básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    
+    /* CORRECCIÓN DEE MAQUETACIÓN: */
+    min-height: 100vh;      /* Ocupa al menos toda la pantalla */
+    width: 100%;            /* Ancho total */
+    overflow-x: hidden;     /* Evita scroll horizontal accidental */
+    overflow-y: auto;       /* Permite scroll vertical normal */
+    display: block;         /* Eliminamos el flex que centraba todo agresivamente */
+    position: relative;
+}
+
+h1 {
+    font-family: var(--font-header);
+    font-size: 3rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent-rust);
+}
+
+/* --- SCROLLBAR PERSONALIZADO (Chrome/Edge/Safari) --- */
+::-webkit-scrollbar {
+    width: 10px;
+    background: #000;
+}
+
+::-webkit-scrollbar-track {
+    background: #0a0a0a;
+    border-left: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--accent-blood); /* Barra roja sangre */
+    border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-rust); /* Naranja al pasar el mouse */
+    box-shadow: 0 0 10px var(--accent-rust);
+}

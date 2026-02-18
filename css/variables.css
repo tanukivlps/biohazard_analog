@@ -1,0 +1,23 @@
+:root {
+    /* --- PALETA DE COLORES (BIOHAZARD REVISED) --- */
+    --bg-color: #050505;       /* Negro casi puro */
+    
+    /* Aumentamos el brillo para mejorar lectura */
+    --text-primary: #e8e6e3;   /* Blanco Hueso más brillante */
+    --text-dim: #9ca3af;       /* Gris claro (antes era muy oscuro) */
+    
+    /* Colores de Acento (Más neón/luminosos) */
+    --accent-blood: #ff3333;   /* Rojo Alerta (Antes era muy oscuro) */
+    --accent-rust: #ff8c42;    /* Naranja Óxido Brillante */
+    
+    --ui-grid: rgba(255, 255, 255, 0.05);
+
+    /* --- TIPOGRAFÍA --- */
+    --font-header: 'Impact', 'Arial Black', sans-serif; 
+    --font-body: 'Courier New', Courier, monospace;
+
+    /* --- ESPACIADO --- */
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 32px;
+}
