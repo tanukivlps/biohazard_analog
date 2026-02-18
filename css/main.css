@@ -546,4 +546,18 @@ html, body, * {
     .section-title {
         font-size: 1.5rem;
     }
+
+    /* NUEVO: Ajuste del botón de contacto gigante */
+    .contact-link {
+        font-size: 0.7rem !important; /* Reducimos la letra drásticamente */
+        padding: 12px 10px !important; /* Menos relleno lateral */
+        width: 100%;                   /* Que ocupe todo el ancho disponible */
+        display: block;                /* Asegura que sea un bloque */
+        white-space: normal;           /* Permite que el texto salte de línea si es necesario */
+        line-height: 1.4;              /* Espaciado si salta de línea */
+    }
+
+    .footer-status {
+        font-size: 0.7rem;             /* Ajustamos también el texto de estado */
+    }
 }
