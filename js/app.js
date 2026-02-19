@@ -12,11 +12,14 @@ document.addEventListener("DOMContentLoaded", () => {
     let gameStarted = false;
     let currentPage = 'main-menu';
 
+    // Detección de Móvil (Para optimización)
+    const isMobile = window.innerWidth < 768;
+
     // Bloqueo inicial
     body.classList.add('locked');
 
     // =========================================
-    // 2. SISTEMA DE CURSOR TÁCTICO & SONIDO HOVER
+    // 2. SISTEMA DE CURSOR TÁCTICO
     // =========================================
     let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
     let posX = window.innerWidth / 2, posY = window.innerHeight / 2;
@@ -32,20 +35,19 @@ document.addEventListener("DOMContentLoaded", () => {
         gsap.set(follower, { x: posX, y: posY });
     });
 
-    // Efecto Hover Visual + Sonoro
+    // Efecto Hover Magnético + Sonido (Optimizado para móvil)
     const addHoverEffect = () => {
         const interactive = document.querySelectorAll('a, button, .project-card, .module-card, li, .selected-lang, .lang-dropdown li, .filter-btn');
         const hoverSound = document.getElementById('sfx-hover');
 
-        // Ajustar volumen del hover si existe
         if(hoverSound) hoverSound.volume = 0.2; 
 
         interactive.forEach(el => {
             el.addEventListener('mouseenter', () => {
                 follower.classList.add('cursor-active');
                 
-                // Reproducir sonido breve
-                if(hoverSound) {
+                // Solo reproducir sonido en PC para ahorrar recursos
+                if(hoverSound && !isMobile) {
                     hoverSound.currentTime = 0;
                     hoverSound.play().catch(() => {});
                 }
@@ -59,23 +61,19 @@ document.addEventListener("DOMContentLoaded", () => {
     // 3. ANIMACIÓN DE ENTRADA (DEFINICIÓN)
     // =========================================
     function playIntroSequence() {
-        // 1. Preparar elementos (Posición inicial y opacidad)
         gsap.set(".hero-name-wrapper", { y: 100 });
         gsap.set(".hemisphere", { y: 30 });
         gsap.set(".split-divider", { scaleY: 0 });
         gsap.set(".hero-actions", { y: 30 });
         
-        // Preparar Widget de Audio (Oculto al inicio)
+        // Preparar Widget de Audio
         gsap.set("#audio-widget", { y: 20, autoAlpha: 0 });
 
-        // 2. Secuencia de Animación
         const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
-        
         tl.to(".hero-name-wrapper", { duration: 1.5, y: 0, autoAlpha: 1 })
           .to(".split-divider", { duration: 0.8, scaleY: 1 }, "-=0.5")
           .to(".hemisphere", { duration: 0.8, y: 0, autoAlpha: 1, stagger: 0.2 }, "-=0.5")
           .to(".hero-actions", { duration: 1, y: 0, autoAlpha: 1 }, "-=0.3")
-          // Aparece el reproductor al final
           .to("#audio-widget", { duration: 1, y: 0, autoAlpha: 1 }, "-=0.5");
     }
 
@@ -86,26 +84,24 @@ document.addEventListener("DOMContentLoaded", () => {
         if (gameStarted) return;
         gameStarted = true;
 
-        // A. Reproducir Sonido de Acceso
+        // Audio
         const accessSound = document.getElementById('sfx-access');
         if (accessSound) {
             accessSound.volume = 0.5;
             accessSound.play().catch(error => console.log("SFX Error:", error));
         }
 
-        // B. Reproducir Música de Fondo
         const bgm = document.getElementById('bgm-main');
         if (bgm) {
             bgm.volume = 0.3;
             bgm.play().catch(error => console.log("BGM Error:", error));
         }
 
-        // C. Desvanecer Pantalla de Inicio
+        // Animación
         gsap.to(startScreen, {
             duration: 1.5, opacity: 0, ease: "power2.inOut",
             onComplete: () => {
                 startScreen.style.display = "none";
-                // D. AQUÍ ESTABA EL ERROR: AHORA LLAMAMOS A LA FUNCIÓN CORRECTAMENTE
                 playIntroSequence(); 
             }
         });
@@ -199,9 +195,10 @@ document.addEventListener("DOMContentLoaded", () => {
             init_comm: "INICIAR_PROTOCOLO_COMUNICACIÓN",
             rights: "TODOS LOS DERECHOS RESERVADOS.",
             return_main: "VOLVER AL SISTEMA PRINCIPAL",
-            loading: "CARGANDO DATOS...",
+            loading: "CARGANDO DATOS...", 
             recruit_label: "DISPONIBLE PARA DESPLIEGUE",
             btn_contact: "ESTABLECER_ENLACE [EMAIL]",
+            email_copied: ">> EMAIL COPIADO <<", // NUEVO
             
             // Títulos Páginas
             visual_log_title: "REGISTRO_VISUAL // MODELOS_3D",
@@ -259,6 +256,23 @@ document.addEventListener("DOMContentLoaded", () => {
             mod_sound_desc: "Fundamentos de frecuencia y mezcla.",
             mod_fl_desc: "Flujo de trabajo en DAW y composición básica.",
 
+            // Títulos de Módulos
+            mod_doll_title: "DISEÑO DE MUÑECOS",
+            mod_crochet_title: "CROCHET",
+            mod_story_title: "STORYTELLING",
+            mod_ling_title: "LINGÜÍSTICA",
+            mod_back_title: "BACKSTORY",
+            mod_psy_title: "PSICOLOGÍA",
+            mod_soc_title: "SOCIOLOGÍA",
+            mod_phil_title: "FILOSOFÍA",
+            mod_world_title: "WORLDBUILDING",
+            mod_magic_title: "SISTEMAS MAGIA/CIENCIA",
+            mod_color_title: "PSICOLOGÍA DEL COLOR",
+            mod_chrono_title: "CRONOMETRÍA",
+            mod_lyrics_title: "LÍRICA",
+            mod_sound_title: "INGENIERÍA DE SONIDO",
+            mod_fl_title: "FL STUDIO",
+
             // Idiomas
             comm_protocols: "PROTOCOLOS DE COMUNICACIÓN:",
             lang_es_title: "ESPAÑOL",
@@ -278,7 +292,6 @@ document.addEventListener("DOMContentLoaded", () => {
             subject_id: "SUBJECT IDENTIFIED:",
             visual_cortex: "[ VISUAL CORTEX ]",
             narrative_core: "[ NARRATIVE CORE ]",
-            
             v_skill_1: "3D Modeling & Sculpting",
             v_skill_2: "Hard Surface Design",
             v_skill_3: "Concept Art & Texturing",
@@ -287,7 +300,6 @@ document.addEventListener("DOMContentLoaded", () => {
             n_skill_2: "World Building & Lore",
             n_skill_3: "Magic Systems Logic",
             n_skill_4: "Environmental Storytelling",
-
             btn_visual: "ACCESS VISUAL DATA",
             btn_narrative: "ACCESS LORE ARCHIVES",
             session_status: "SESSION STATUS:",
@@ -298,6 +310,7 @@ document.addEventListener("DOMContentLoaded", () => {
             loading: "LOADING DATA...",
             recruit_label: "AVAILABLE FOR DEPLOYMENT",
             btn_contact: "ESTABLISH_UPLINK [EMAIL]",
+            email_copied: ">> EMAIL COPIED <<", // NUEVO
 
             visual_log_title: "VISUAL_LOG // 3D_MODELS",
             narrative_log_title: "NARRATIVE_LOG // LORE",
@@ -360,7 +373,24 @@ document.addEventListener("DOMContentLoaded", () => {
             lang_native: "Native / Mother Tongue.",
             lang_inter: "Intermediate Proficiency.",
             lang_basic_inter: "Basic / Intermediate.",
-            lang_basic: "Basic Knowledge."
+            lang_basic: "Basic Knowledge.",
+
+            // Títulos de Módulos (EN)
+            mod_doll_title: "DOLL DESIGN",
+            mod_crochet_title: "CROCHET",
+            mod_story_title: "STORYTELLING",
+            mod_ling_title: "LINGUISTICS",
+            mod_back_title: "BACKSTORY",
+            mod_psy_title: "PSYCHOLOGY",
+            mod_soc_title: "SOCIOLOGY",
+            mod_phil_title: "PHILOSOPHY",
+            mod_world_title: "WORLDBUILDING",
+            mod_magic_title: "MAGIC/SCIENCE SYSTEMS",
+            mod_color_title: "COLOR PSYCHOLOGY",
+            mod_chrono_title: "CHRONOMETRY",
+            mod_lyrics_title: "LYRICS",
+            mod_sound_title: "SOUND ENGINEERING",
+            mod_fl_title: "FL STUDIO"
         },
         it: {
             system_status: "SISTEMA: ONLINE",
@@ -394,6 +424,8 @@ document.addEventListener("DOMContentLoaded", () => {
             loading: "CARICAMENTO DATI...",
             recruit_label: "DISPONIBILE PER L'IMPIEGO",
             btn_contact: "STABILIRE_COLLEGAMENTO [EMAIL]",
+            email_copied: ">> EMAIL COPIATO <<", // NUEVO
+
             visual_log_title: "REGISTRO_VISIVO // MODELLI_3D",
             narrative_log_title: "REGISTRO_NARRATIVO // LORE",
             installed_modules: "MODULI INSTALLATI:",
@@ -442,7 +474,24 @@ document.addEventListener("DOMContentLoaded", () => {
             lang_native: "Madrelingua.",
             lang_inter: "Competenza Intermedia.",
             lang_basic_inter: "Base / Intermedio.",
-            lang_basic: "Nozioni di Base."
+            lang_basic: "Nozioni di Base.",
+
+            // Títulos de Módulos (IT)
+            mod_doll_title: "DESIGN DI BAMBOLE",
+            mod_crochet_title: "UNCINETTO",
+            mod_story_title: "STORYTELLING",
+            mod_ling_title: "LINGUISTICA",
+            mod_back_title: "BACKSTORY",
+            mod_psy_title: "PSICOLOGIA",
+            mod_soc_title: "SOCIOLOGIA",
+            mod_phil_title: "FILOSOFIA",
+            mod_world_title: "WORLDBUILDING",
+            mod_magic_title: "SISTEMI MAGIA/SCIENZA",
+            mod_color_title: "PSICOLOGIA DEL COLORE",
+            mod_chrono_title: "CRONOMETRIA",
+            mod_lyrics_title: "LIRICA",
+            mod_sound_title: "INGEGNERIA DEL SUONO",
+            mod_fl_title: "FL STUDIO"
         },
         fr: {
             system_status: "SYSTÈME: EN LIGNE",
@@ -460,12 +509,27 @@ document.addEventListener("DOMContentLoaded", () => {
             filter_write: "TECHNIQUE D'ÉCRITURE",
             filter_world: "CONSTRUCTION DU MONDE",
             filter_audio: "AUDIO / MUSIQUE",
+            v_skill_1: "Modélisation 3D et Sculpture",
+            v_skill_2: "Conception Hard Surface",
+            v_skill_3: "Concept Art et Texturage",
+            v_skill_4: "Intégration Unreal Engine",
+            n_skill_1: "Profilage Psychologique",
+            n_skill_2: "Construction de Mondes (Lore)",
+            n_skill_3: "Logique des Systèmes Magiques",
+            n_skill_4: "Narration Environnementale",
             visual_log_title: "LOG_VISUEL // MODÈLES_3D",
             narrative_log_title: "LOG_NARRATIF // LORE",
             installed_modules: "MODULES INSTALLÉS:",
             cognitive_modules: "MODULES COGNITIFS:",
             recruit_label: "DISPONIBLE POUR DÉPLOIEMENT",
             btn_contact: "ÉTABLIR_LIAISON [EMAIL]",
+            email_copied: ">> EMAIL COPIÉ <<", // NUEVO
+            session_status: "ÉTAT SESSION:",
+            waiting_input: "EN ATTENTE D'ENTRÉE...",
+            init_comm: "INITIER_PROTOCOLE_COMMUNICATION",
+            rights: "TOUS DROITS RÉSERVÉS.",
+            return_main: "RETOUR SYSTÈME PRINCIPAL",
+            loading: "CHARGEMENT DES DONNÉES...",
             mod_blend_desc: "Hard Surface, Sculpture, Retopologie et Mappage UV.",
             mod_ue5_desc: "Blueprints, Level Design, Flux Lumen & Nanite.",
             mod_marv_desc: "Simulation de tissu et création de patrons.",
@@ -503,7 +567,24 @@ document.addEventListener("DOMContentLoaded", () => {
             lang_native: "Langue Maternelle.",
             lang_inter: "Compétence Intermédiaire.",
             lang_basic_inter: "Basique / Intermédiaire.",
-            lang_basic: "Notions de Base."
+            lang_basic: "Notions de Base.",
+
+            // Títulos de Módulos (FR)
+            mod_doll_title: "DESIGN DE POUPÉES",
+            mod_crochet_title: "CROCHET",
+            mod_story_title: "STORYTELLING",
+            mod_ling_title: "LINGUISTIQUE",
+            mod_back_title: "BACKSTORY",
+            mod_psy_title: "PSYCHOLOGIE",
+            mod_soc_title: "SOCIOLOGIE",
+            mod_phil_title: "PHILOSOPHIE",
+            mod_world_title: "WORLDBUILDING",
+            mod_magic_title: "SYSTÈMES MAGIE/SCIENCE",
+            mod_color_title: "PSYCHOLOGIE DES COULEURS",
+            mod_chrono_title: "CHRONOMÉTRIE",
+            mod_lyrics_title: "PAROLES",
+            mod_sound_title: "INGÉNIERIE DU SON",
+            mod_fl_title: "FL STUDIO"
         },
         de: {
             system_status: "SYSTEM: ONLINE",
@@ -527,6 +608,21 @@ document.addEventListener("DOMContentLoaded", () => {
             cognitive_modules: "KOGNITIVE MODULE:",
             recruit_label: "VERFÜGBAR FÜR EINSATZ",
             btn_contact: "VERBINDUNG_HERSTELLEN [EMAIL]",
+            email_copied: ">> EMAIL KOPIERT <<", // NUEVO
+            session_status: "SITZUNGSSTATUS:",
+            waiting_input: "WARTE AUF EINGABE...",
+            init_comm: "KOMMUNIKATIONSPROTOKOLL_STARTEN",
+            rights: "ALLE RECHTE VORBEHALTEN.",
+            return_main: "ZURÜCK ZUM HAUPTSYSTEM",
+            loading: "DATEN WERDEN GELADEN...",
+            v_skill_1: "3D-Modellierung & Skulptur",
+            v_skill_2: "Hard-Surface-Design",
+            v_skill_3: "Concept Art & Texturierung",
+            v_skill_4: "Unreal Engine Integration",
+            n_skill_1: "Psychologisches Profiling",
+            n_skill_2: "Weltenbau (Lore)",
+            n_skill_3: "Logik magischer Systeme",
+            n_skill_4: "Umgebungsnarrative",
             mod_blend_desc: "Hard Surface, Skulpting, Retopologie & UV-Mapping.",
             mod_ue5_desc: "Blueprints, Level Design, Lumen & Nanite Workflows.",
             mod_marv_desc: "Stoffsimulation und Mustererstellung.",
@@ -564,7 +660,24 @@ document.addEventListener("DOMContentLoaded", () => {
             lang_native: "Muttersprache.",
             lang_inter: "Mittelstufe.",
             lang_basic_inter: "Grundkenntnisse / Mittelstufe.",
-            lang_basic: "Grundkenntnisse."
+            lang_basic: "Grundkenntnisse.",
+
+            // Títulos de Módulos (DE)
+            mod_doll_title: "PUPPENDESIGN",
+            mod_crochet_title: "HÄKELN",
+            mod_story_title: "STORYTELLING",
+            mod_ling_title: "LINGUISTIK",
+            mod_back_title: "BACKSTORY",
+            mod_psy_title: "PSYCHOLOGIE",
+            mod_soc_title: "SOZIOLOGIE",
+            mod_phil_title: "PHILOSOPHIE",
+            mod_world_title: "WELTENBAU",
+            mod_magic_title: "MAGIE-/WISSENSCHAFTSSYSTEME",
+            mod_color_title: "FARBPSYCHOLOGIE",
+            mod_chrono_title: "CHRONOMETRIE",
+            mod_lyrics_title: "LYRIK",
+            mod_sound_title: "TONTECHNIK",
+            mod_fl_title: "FL STUDIO"
         },
         jp: {
             system_status: "システム: オンライン",
@@ -588,6 +701,21 @@ document.addEventListener("DOMContentLoaded", () => {
             cognitive_modules: "認知モジュール:",
             recruit_label: "配備可能",
             btn_contact: "通信リンク確立 [EMAIL]",
+            email_copied: ">> メールコピー完了 <<", // NUEVO
+            session_status: "セッション状態:",
+            waiting_input: "入力待機中...",
+            init_comm: "通信プロトコル開始",
+            rights: "全著作権所有",
+            return_main: "メインシステムに戻る",
+            loading: "データ読み込み中...",
+            v_skill_1: "3Dモデリング & スカルプト",
+            v_skill_2: "ハードサーフェスデザイン",
+            v_skill_3: "コンセプトアート & テクスチャ",
+            v_skill_4: "Unreal Engine 統合",
+            n_skill_1: "心理プロファイリング",
+            n_skill_2: "世界構築 (Lore)",
+            n_skill_3: "魔法システムの論理",
+            n_skill_4: "環境ストーリーテリング",
             mod_blend_desc: "ハードサーフェス、スカルプト、リトポロジー、UV。",
             mod_ue5_desc: "ブループリント、レベルデザイン、Lumen & Nanite。",
             mod_marv_desc: "布のシミュレーションと複雑なパターン作成。",
@@ -625,7 +753,24 @@ document.addEventListener("DOMContentLoaded", () => {
             lang_native: "母国語",
             lang_inter: "中級レベル",
             lang_basic_inter: "初級 / 中級",
-            lang_basic: "基礎知識"
+            lang_basic: "基礎知識",
+
+            // Títulos de Módulos (JP)
+            mod_doll_title: "人形デザイン",
+            mod_crochet_title: "かぎ針編み",
+            mod_story_title: "ストーリーテリング",
+            mod_ling_title: "言語学",
+            mod_back_title: "バックストーリー",
+            mod_psy_title: "心理学",
+            mod_soc_title: "社会学",
+            mod_phil_title: "哲学",
+            mod_world_title: "世界構築",
+            mod_magic_title: "魔法/科学システム",
+            mod_color_title: "色彩心理学",
+            mod_chrono_title: "時間測定法",
+            mod_lyrics_title: "歌詞",
+            mod_sound_title: "音響工学",
+            mod_fl_title: "FL STUDIO"
         }
     };
 
@@ -686,9 +831,10 @@ document.addEventListener("DOMContentLoaded", () => {
         let width, height;
         let particles = [];
         
-        const particleCount = 80;
-        const connectionDistance = 180;
-        const mouseDistance = 250;
+        // Optimización: Menos partículas en móvil
+        const particleCount = isMobile ? 20 : 80;
+        const connectionDistance = isMobile ? 100 : 180;
+        const mouseDistance = isMobile ? 150 : 250;
 
         const styles = getComputedStyle(document.body);
         const accentColor = styles.getPropertyValue('--accent-blood').trim() || '#ff0000';
@@ -779,12 +925,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // =========================================
-    // 8. SISTEMA DE CONTACTO (ROBUSTO)
+    // 8. SISTEMA DE CONTACTO (ROBUSTO + TRADUCIDO)
     // =========================================
     const contactBtn = document.getElementById('contact-btn');
     
     if (contactBtn) {
         contactBtn.addEventListener('click', (e) => {
+            // Obtenemos el idioma ACTUAL justo al hacer clic
+            const currentLang = document.getElementById('current-lang-text').innerText.toLowerCase();
+            
             let email = contactBtn.getAttribute('data-email');
             
             if (!email || email === "null") {
@@ -793,10 +942,17 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             const btnTextSpan = contactBtn.querySelector('.btn-text');
-            const currentLang = document.getElementById('current-lang-text').innerText.toLowerCase();
 
             navigator.clipboard.writeText(email).then(() => {
-                btnTextSpan.innerText = ">> EMAIL COPIADO <<"; 
+                // AQUI ESTABA EL ERROR: Usamos la traducción dinámica
+                let copiedMsg = ">> EMAIL COPIADO <<"; // Fallback por seguridad
+                
+                if (translations[currentLang] && translations[currentLang]['email_copied']) {
+                    copiedMsg = translations[currentLang]['email_copied'];
+                }
+
+                btnTextSpan.innerText = copiedMsg; 
+                
                 contactBtn.style.borderColor = "#00ff41";
                 contactBtn.style.color = "#00ff41";
                 contactBtn.style.boxShadow = "0 0 15px #00ff41";

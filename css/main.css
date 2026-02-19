@@ -549,6 +549,27 @@ html, body, * { cursor: none !important; }
     /* 9. Ajuste de márgenes generales */
     .hero-section { padding-top: 100px; min-height: auto; padding-bottom: 50px; }
     .projects-section { padding: 40px 5%; }
+
+    /* 10. OPTIMIZACIÓN RENDIMIENTO: Desactivar efectos pesados */
+    .noise, 
+    .scanlines { 
+        display: none !important; /* Ahorra batería y GPU */
+    }
+
+    * {
+        text-shadow: none !important;
+        box-shadow: none !important;
+    }
+
+    /* Excepción para el título principal */
+    .glitch-text {
+        text-shadow: 2px 2px 0px var(--accent-blood) !important; 
+    }
+    
+    #bio-canvas {
+        filter: none !important;
+        opacity: 0.3 !important;
+    }
 }
 
 /* --- SELECTOR DE IDIOMA (LANGUAGE MODULE) --- */
@@ -635,7 +656,8 @@ body[data-lang="jp"] {
 .hero-name-wrapper,
 .hemisphere,
 .split-divider,
-.hero-actions {
+.hero-actions,
+#audio-widget {
     opacity: 0;
     visibility: hidden; /* Esto asegura que el navegador no los pinte al inicio */
 }
