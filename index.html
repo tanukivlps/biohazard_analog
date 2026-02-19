@@ -20,6 +20,14 @@
 
     <canvas id="bio-canvas"></canvas>
 
+    <audio id="sfx-access" src="assets/audio/access.mp3" preload="auto"></audio>
+    <audio id="sfx-hover" src="assets/audio/hover.mp3" preload="auto"></audio>
+
+    <audio id="sfx-access" src="assets/audio/access.mp3" preload="auto"></audio>
+    <audio id="sfx-hover" src="assets/audio/hover.mp3" preload="auto"></audio>
+    
+    <audio id="bgm-main" src="assets/audio/music.mp3" preload="auto" loop></audio>
+
     <header class="hud-header">
         <div class="hud-item left">
             <span class="status-dot"></span> <span data-i18n="system_status">SISTEMA: EN LÍNEA</span>
@@ -49,7 +57,7 @@
 
     <div id="start-screen" class="start-screen">
         <div class="start-content">
-            <h1 class="game-title">REQUIEM_FOR_THE_NAMELESS</h1>
+            <h1 class="game-title">REQUIEM FOR THE NAMELESS</h1>
             <p class="press-key-text" data-i18n="press_key">PRESIONA CUALQUIER TECLA</p>
         </div>
     </div>
@@ -142,9 +150,17 @@
                     </div>
                 </div>
 
-                <div class="projects-grid">
-                    <article class="project-card">
-                        <div class="card-visual"><div class="placeholder-img">UE5 RENDER</div></div>
+                <div class="filter-menu">
+                    <button class="filter-btn active" data-filter="all" data-i18n="filter_all">ALL_DATA</button>
+                    <button class="filter-btn" data-filter="3d" data-i18n="filter_3d">3D MODELING</button>
+                    <button class="filter-btn" data-filter="illustration" data-i18n="filter_ill">ILLUSTRATION</button>
+                    <button class="filter-btn" data-filter="marvelous" data-i18n="filter_mar">CLOTH SIM</button>
+                    <button class="filter-btn" data-filter="crafts" data-i18n="filter_crafts">CRAFTS</button>
+                </div>
+
+                <div class="projects-grid" id="visual-grid">
+                    <article class="project-card" data-category="3d">
+                        <div class="card-visual"><div class="placeholder-img">UE5 ENV</div></div>
                         <div class="card-info">
                             <span class="project-id">VISUAL_#001</span>
                             <h4 class="project-title">PROJECT_ZENITH</h4>
@@ -152,31 +168,139 @@
                             <div class="tags"><span class="tag">UE5</span><span class="tag">BLENDER</span></div>
                         </div>
                     </article>
-                    
-                     <article class="project-card">
-                        <div class="card-visual"><div class="placeholder-img">SCULPT</div></div>
-                        <div class="card-info">
-                            <span class="project-id">VISUAL_#002</span>
-                            <h4 class="project-title">CYBER_HEAD</h4>
-                            <p class="project-desc" data-i18n="proj_head_desc">Esculpido orgánico hard-surface.</p>
-                            <div class="tags"><span class="tag">ZBRUSH</span></div>
-                        </div>
-                    </article>
                 </div>
                 
                 <div class="arsenal-section" style="padding-top: 50px;">
-                     <h4 class="module-name" style="margin-bottom: 20px; color: var(--accent-rust);" data-i18n="installed_modules">MÓDULOS INSTALADOS:</h4>
+                     <h4 class="module-name" style="margin-bottom: 30px; color: var(--accent-rust);" data-i18n="installed_modules">MÓDULOS INSTALADOS:</h4>
+                     
                      <div class="arsenal-grid">
+                        
                         <div class="module-card">
-                            <h4 class="module-name">UNREAL ENGINE 5</h4>
-                            <p class="module-desc" data-i18n="mod_ue5_desc">Blueprints, Diseño de Niveles, Flujos Lumen & Nanite.</p>
-                            <div class="module-bar-container"><div class="module-bar" style="width: 90%"></div></div>
+                            <div class="module-header-row">
+                                <h4 class="module-name">BLENDER 3D</h4>
+                                <span class="module-percent">65%</span>
+                            </div>
+                            <div class="module-bar-container"><div class="module-bar" style="width: 65%"></div></div>
+                            <p class="module-desc" data-i18n="mod_blend_desc">Hard Surface, Esculpido, Retopología.</p>
                         </div>
+
                         <div class="module-card">
-                            <h4 class="module-name">BLENDER 3D</h4>
-                            <p class="module-desc" data-i18n="mod_blend_desc">Hard Surface, Esculpido, Retopología y Mapeo UV.</p>
-                            <div class="module-bar-container"><div class="module-bar" style="width: 85%"></div></div>
+                            <div class="module-header-row">
+                                <h4 class="module-name">UNREAL ENGINE 5</h4>
+                                <span class="module-percent">45%</span>
+                            </div>
+                            <div class="module-bar-container"><div class="module-bar" style="width: 45%"></div></div>
+                            <p class="module-desc" data-i18n="mod_ue5_desc">Blueprints, Diseño de Niveles.</p>
                         </div>
+
+                        <div class="module-card">
+                            <div class="module-header-row">
+                                <h4 class="module-name">MARVELOUS DESIGNER</h4>
+                                <span class="module-percent">65%</span>
+                            </div>
+                            <div class="module-bar-container"><div class="module-bar" style="width: 65%"></div></div>
+                            <p class="module-desc" data-i18n="mod_marv_desc">Simulación de telas y patrones.</p>
+                        </div>
+
+                        <div class="module-card">
+                            <div class="module-header-row">
+                                <h4 class="module-name">SUBSTANCE PAINTER</h4>
+                                <span class="module-percent">65%</span>
+                            </div>
+                            <div class="module-bar-container"><div class="module-bar" style="width: 65%"></div></div>
+                            <p class="module-desc" data-i18n="mod_sp_desc">Texturizado PBR y Materiales Smart.</p>
+                        </div>
+
+                        <div class="module-card">
+                            <div class="module-header-row">
+                                <h4 class="module-name">ZBRUSH</h4>
+                                <span class="module-percent">65%</span>
+                            </div>
+                            <div class="module-bar-container"><div class="module-bar" style="width: 65%"></div></div>
+                            <p class="module-desc" data-i18n="mod_zb_desc">Esculpido orgánico de alta fidelidad.</p>
+                        </div>
+
+                        <div class="module-card">
+                            <div class="module-header-row">
+                                <h4 class="module-name">AUTODESK MAYA</h4>
+                                <span class="module-percent">65%</span>
+                            </div>
+                            <div class="module-bar-container"><div class="module-bar" style="width: 65%"></div></div>
+                            <p class="module-desc" data-i18n="mod_maya_desc">Modelado poligonal y UV mapping.</p>
+                        </div>
+
+                        <div class="module-card">
+                            <div class="module-header-row">
+                                <h4 class="module-name">ADOBE PHOTOSHOP</h4>
+                                <span class="module-percent">45%</span>
+                            </div>
+                            <div class="module-bar-container"><div class="module-bar" style="width: 45%"></div></div>
+                            <p class="module-desc" data-i18n="mod_ps_desc">Edición de imagen y Post-proceso.</p>
+                        </div>
+
+                        <div class="module-card">
+                            <div class="module-header-row">
+                                <h4 class="module-name">ADOBE ILLUSTRATOR</h4>
+                                <span class="module-percent">45%</span>
+                            </div>
+                            <div class="module-bar-container"><div class="module-bar" style="width: 45%"></div></div>
+                            <p class="module-desc" data-i18n="mod_ai_desc">Diseño vectorial y logotipos.</p>
+                        </div>
+
+                        <div class="module-card">
+                            <div class="module-header-row">
+                                <h4 class="module-name">AFTER EFFECTS</h4>
+                                <span class="module-percent">45%</span>
+                            </div>
+                            <div class="module-bar-container"><div class="module-bar" style="width: 45%"></div></div>
+                            <p class="module-desc" data-i18n="mod_ae_desc">Motion Graphics y Composición.</p>
+                        </div>
+
+                        <div class="module-card">
+                            <div class="module-header-row">
+                                <h4 class="module-name">UNITY ENGINE</h4>
+                                <span class="module-percent">45%</span>
+                            </div>
+                            <div class="module-bar-container"><div class="module-bar" style="width: 45%"></div></div>
+                            <p class="module-desc" data-i18n="mod_unity_desc">Implementación de assets y escenas.</p>
+                        </div>
+
+                        <div class="module-card">
+                            <div class="module-header-row">
+                                <h4 class="module-name">KRITA</h4>
+                                <span class="module-percent">65%</span>
+                            </div>
+                            <div class="module-bar-container"><div class="module-bar" style="width: 65%"></div></div>
+                            <p class="module-desc" data-i18n="mod_krita_desc">Ilustración digital y bocetaje.</p>
+                        </div>
+
+                        <div class="module-card">
+                            <div class="module-header-row">
+                                <h4 class="module-name">INFINITE PAINTER</h4>
+                                <span class="module-percent">65%</span>
+                            </div>
+                            <div class="module-bar-container"><div class="module-bar" style="width: 65%"></div></div>
+                            <p class="module-desc" data-i18n="mod_inf_desc">Pintura digital en dispositivos móviles.</p>
+                        </div>
+
+                        <div class="module-card">
+                            <div class="module-header-row">
+                                <h4 class="module-name">DISEÑO DE MUÑECOS</h4>
+                                <span class="module-percent">45%</span>
+                            </div>
+                            <div class="module-bar-container"><div class="module-bar" style="width: 45%"></div></div>
+                            <p class="module-desc" data-i18n="mod_doll_desc">Confección de peluches y patrones.</p>
+                        </div>
+
+                        <div class="module-card">
+                            <div class="module-header-row">
+                                <h4 class="module-name">CROCHET</h4>
+                                <span class="module-percent">25%</span>
+                            </div>
+                            <div class="module-bar-container"><div class="module-bar" style="width: 25%"></div></div>
+                            <p class="module-desc" data-i18n="mod_crochet_desc">Tejido básico y amigurumis.</p>
+                        </div>
+
                      </div>
                 </div>
             </section>
@@ -194,18 +318,26 @@
                     </div>
                 </div>
 
-                <div class="projects-grid">
-                    <article class="project-card">
+                <div class="filter-menu">
+                    <button class="filter-btn active" data-filter="all" data-i18n="filter_all">ALL_DATA</button>
+                    <button class="filter-btn" data-filter="writing" data-i18n="filter_write">WRITING TECH</button>
+                    <button class="filter-btn" data-filter="world" data-i18n="filter_world">WORLDBUILDING</button>
+                    <button class="filter-btn" data-filter="audio" data-i18n="filter_audio">AUDIO / MUSIC</button>
+                </div>
+
+                <div class="projects-grid" id="narrative-grid">
+                    
+                    <article class="project-card" data-category="writing">
                         <div class="card-visual"><div class="placeholder-img">DOCS</div></div>
                         <div class="card-info">
                             <span class="project-id">LORE_#001</span>
                             <h4 class="project-title">ECHOES OF SILENCE</h4>
-                            <p class="project-desc" data-i18n="proj_echoes_desc">Guion técnico y perfil psicológico del protagonista.</p>
+                            <p class="project-desc" data-i18n="proj_echoes_desc">Guion técnico y perfil psicológico.</p>
                             <div class="tags"><span class="tag">WRITING</span></div>
                         </div>
                     </article>
                     
-                    <article class="project-card">
+                    <article class="project-card" data-category="world">
                         <div class="card-visual"><div class="placeholder-img">MAP</div></div>
                         <div class="card-info">
                             <span class="project-id">LORE_#002</span>
@@ -214,22 +346,219 @@
                             <div class="tags"><span class="tag">WORLD BUILDING</span></div>
                         </div>
                     </article>
+
+                    <article class="project-card" data-category="audio">
+                        <div class="card-visual"><div class="placeholder-img">WAVE</div></div>
+                        <div class="card-info">
+                            <span class="project-id">AUDIO_#001</span>
+                            <h4 class="project-title">NEURO_BEATS</h4>
+                            <p class="project-desc" data-i18n="proj_audio_desc">Composición lírica y experimental.</p>
+                            <div class="tags"><span class="tag">FL STUDIO</span><span class="tag">LYRICS</span></div>
+                        </div>
+                    </article>
                 </div>
 
                  <div class="arsenal-section" style="padding-top: 50px;">
-                     <h4 class="module-name" style="margin-bottom: 20px; color: var(--accent-rust);" data-i18n="cognitive_modules">MÓDULOS COGNITIVOS:</h4>
+                     <h4 class="module-name" style="margin-bottom: 30px; color: var(--accent-rust);" data-i18n="cognitive_modules">MÓDULOS COGNITIVOS:</h4>
+                     
                      <div class="arsenal-grid">
+                        
                         <div class="module-card">
-                            <h4 class="module-name">NARRATIVE DESIGN</h4>
-                             <p class="module-desc" data-i18n="mod_narr_desc">Narrativa Ambiental, Creación de Lore, Psicología de Personajes.</p>
-                            <div class="module-bar-container"><div class="module-bar" style="width: 95%"></div></div>
+                            <div class="module-header-row">
+                                <h4 class="module-name">STORYTELLING</h4>
+                                <span class="module-percent">65%</span>
+                            </div>
+                            <div class="module-bar-container"><div class="module-bar" style="width: 65%"></div></div>
+                            <p class="module-desc" data-i18n="mod_story_desc">Estructura narrativa y ritmo.</p>
                         </div>
+
+                        <div class="module-card">
+                            <div class="module-header-row">
+                                <h4 class="module-name">LINGÜÍSTICA</h4>
+                                <span class="module-percent">65%</span>
+                            </div>
+                            <div class="module-bar-container"><div class="module-bar" style="width: 65%"></div></div>
+                            <p class="module-desc" data-i18n="mod_ling_desc">Sintaxis, diálogo y creación de lenguas.</p>
+                        </div>
+
+                        <div class="module-card">
+                            <div class="module-header-row">
+                                <h4 class="module-name">BACKSTORY</h4>
+                                <span class="module-percent">45%</span>
+                            </div>
+                            <div class="module-bar-container"><div class="module-bar" style="width: 45%"></div></div>
+                            <p class="module-desc" data-i18n="mod_back_desc">Arcos de personaje y pasado.</p>
+                        </div>
+
+                        <div class="module-card">
+                            <div class="module-header-row">
+                                <h4 class="module-name">PSICOLOGÍA</h4>
+                                <span class="module-percent">45%</span>
+                            </div>
+                            <div class="module-bar-container"><div class="module-bar" style="width: 45%"></div></div>
+                            <p class="module-desc" data-i18n="mod_psy_desc">Arquetipos y comportamiento conductual.</p>
+                        </div>
+
+                        <div class="module-card">
+                            <div class="module-header-row">
+                                <h4 class="module-name">SOCIOLOGÍA</h4>
+                                <span class="module-percent">45%</span>
+                            </div>
+                            <div class="module-bar-container"><div class="module-bar" style="width: 45%"></div></div>
+                            <p class="module-desc" data-i18n="mod_soc_desc">Estructuras sociales y culturas.</p>
+                        </div>
+
+                        <div class="module-card">
+                            <div class="module-header-row">
+                                <h4 class="module-name">FILOSOFÍA</h4>
+                                <span class="module-percent">45%</span>
+                            </div>
+                            <div class="module-bar-container"><div class="module-bar" style="width: 45%"></div></div>
+                            <p class="module-desc" data-i18n="mod_phil_desc">Ética, moral y profundidad temática.</p>
+                        </div>
+
+                        <div class="module-card">
+                            <div class="module-header-row">
+                                <h4 class="module-name">WORLDBUILDING</h4>
+                                <span class="module-percent">65%</span>
+                            </div>
+                            <div class="module-bar-container"><div class="module-bar" style="width: 65%"></div></div>
+                            <p class="module-desc" data-i18n="mod_world_desc">Geografía, historia y lore cohesivo.</p>
+                        </div>
+
+                        <div class="module-card">
+                            <div class="module-header-row">
+                                <h4 class="module-name">SISTEMAS MAGIA/CIENCIA</h4>
+                                <span class="module-percent">65%</span>
+                            </div>
+                            <div class="module-bar-container"><div class="module-bar" style="width: 65%"></div></div>
+                            <p class="module-desc" data-i18n="mod_magic_desc">Lógica de sistemas duros y blandos.</p>
+                        </div>
+
+                        <div class="module-card">
+                            <div class="module-header-row">
+                                <h4 class="module-name">PSICOLOGÍA DEL COLOR</h4>
+                                <span class="module-percent">65%</span>
+                            </div>
+                            <div class="module-bar-container"><div class="module-bar" style="width: 65%"></div></div>
+                            <p class="module-desc" data-i18n="mod_color_desc">Narrativa visual y atmósfera.</p>
+                        </div>
+
+                        <div class="module-card">
+                            <div class="module-header-row">
+                                <h4 class="module-name">CRONOMETRÍA</h4>
+                                <span class="module-percent">65%</span>
+                            </div>
+                            <div class="module-bar-container"><div class="module-bar" style="width: 65%"></div></div>
+                            <p class="module-desc" data-i18n="mod_chrono_desc">Líneas temporales y ritmo.</p>
+                        </div>
+
+                        <div class="module-card">
+                            <div class="module-header-row">
+                                <h4 class="module-name">LÍRICA</h4>
+                                <span class="module-percent">65%</span>
+                            </div>
+                            <div class="module-bar-container"><div class="module-bar" style="width: 65%"></div></div>
+                            <p class="module-desc" data-i18n="mod_lyrics_desc">Composición de letras y rima.</p>
+                        </div>
+
+                        <div class="module-card">
+                            <div class="module-header-row">
+                                <h4 class="module-name">INGENIERÍA DE SONIDO</h4>
+                                <span class="module-percent">25%</span>
+                            </div>
+                            <div class="module-bar-container"><div class="module-bar" style="width: 25%"></div></div>
+                            <p class="module-desc" data-i18n="mod_sound_desc">Conceptos básicos de mezcla.</p>
+                        </div>
+
+                        <div class="module-card">
+                            <div class="module-header-row">
+                                <h4 class="module-name">FL STUDIO</h4>
+                                <span class="module-percent">25%</span>
+                            </div>
+                            <div class="module-bar-container"><div class="module-bar" style="width: 25%"></div></div>
+                            <p class="module-desc" data-i18n="mod_fl_desc">DAW workflow y producción básica.</p>
+                        </div>
+
                      </div>
+
+                     <div class="arsenal-section" style="padding-top: 50px; border-top: 1px dashed rgba(255, 255, 255, 0.1); margin-top: 30px;">
+                     <h4 class="module-name" style="margin-bottom: 30px; color: var(--accent-rust);" data-i18n="comm_protocols">PROTOCOLOS DE COMUNICACIÓN:</h4>
+                     
+                     <div class="arsenal-grid">
+                        
+                        <div class="module-card">
+                            <div class="module-header-row">
+                                <h4 class="module-name" data-i18n="lang_es_title">ESPAÑOL</h4>
+                                <span class="module-percent">100%</span>
+                            </div>
+                            <div class="module-bar-container"><div class="module-bar" style="width: 100%"></div></div>
+                            <p class="module-desc" data-i18n="lang_native">Nativo / Lengua Materna.</p>
+                        </div>
+
+                        <div class="module-card">
+                            <div class="module-header-row">
+                                <h4 class="module-name" data-i18n="lang_en_title">ENGLISH</h4>
+                                <span class="module-percent">60%</span>
+                            </div>
+                            <div class="module-bar-container"><div class="module-bar" style="width: 60%"></div></div>
+                            <p class="module-desc" data-i18n="lang_inter">Competencia Profesional Intermedia.</p>
+                        </div>
+
+                        <div class="module-card">
+                            <div class="module-header-row">
+                                <h4 class="module-name" data-i18n="lang_it_title">ITALIANO</h4>
+                                <span class="module-percent">50%</span>
+                            </div>
+                            <div class="module-bar-container"><div class="module-bar" style="width: 50%"></div></div>
+                            <p class="module-desc" data-i18n="lang_inter">Competencia Conversacional.</p>
+                        </div>
+
+                        <div class="module-card">
+                            <div class="module-header-row">
+                                <h4 class="module-name" data-i18n="lang_fr_title">FRANÇAIS</h4>
+                                <span class="module-percent">40%</span>
+                            </div>
+                            <div class="module-bar-container"><div class="module-bar" style="width: 40%"></div></div>
+                            <p class="module-desc" data-i18n="lang_basic_inter">Básico / Intermedio.</p>
+                        </div>
+
+                        <div class="module-card">
+                            <div class="module-header-row">
+                                <h4 class="module-name" data-i18n="lang_de_title">DEUTSCH</h4>
+                                <span class="module-percent">25%</span>
+                            </div>
+                            <div class="module-bar-container"><div class="module-bar" style="width: 25%"></div></div>
+                            <p class="module-desc" data-i18n="lang_basic">Nociones Básicas.</p>
+                        </div>
+
+                        <div class="module-card">
+                            <div class="module-header-row">
+                                <h4 class="module-name" data-i18n="lang_jp_title">日本語 (NIHONGO)</h4>
+                                <span class="module-percent">25%</span>
+                            </div>
+                            <div class="module-bar-container"><div class="module-bar" style="width: 25%"></div></div>
+                            <p class="module-desc" data-i18n="lang_basic">Nociones Básicas / Hiragana & Katakana.</p>
+                        </div>
+
+                     </div>
+                </div>
                 </div>
             </section>
         </div>
 
     </main>
+
+    <div id="audio-widget" class="audio-widget">
+        <div class="audio-visualizer">
+            <span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span>
+        </div>
+        <div class="audio-info">
+            <div class="track-name">TRACK: <span id="track-title">NEUROTOXIN - Single</span></div>
+            <div class="track-artist">ARTIST: <span id="track-artist">REQUIEM FOR THE NAMELESS</span></div>
+        </div>
+        <button id="audio-toggle" class="audio-btn">[ || ]</button>
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
